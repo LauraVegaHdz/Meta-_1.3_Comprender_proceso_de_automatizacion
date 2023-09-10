@@ -1,0 +1,31 @@
+import tkinter as tk
+from tkinter import simpledialog
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+
+def buscar_producto():
+    root = tk.Tk()
+    root.withdraw()
+
+    busqueda = simpledialog.askstring("Búsqueda", "Ingrese su búsqueda:")
+    s = Service(ChromeDriverManager().install())
+    opc = Options()
+
+    opc.add_argument("--window-size=1020,1200")  
+    navegador = webdriver.Chrome(service=s, options=opc)
+    navegador.get("https://www.amazon.com.mx/")
+    txt_busqueda = navegador.find_element(By.ID, "twotabsearchtextbox")
+    txt_busqueda.send_keys(busqueda)
+    btnbuscar = navegador.find_element(By.ID, "nav-search-submit-text")
+    btnbuscar.click()
+
+    # Captura de pantalla
+    navegador.save_screenshot("captura.png")
+    time.sleep(5)
+    print(navegador.title)
+
+buscar_producto()
